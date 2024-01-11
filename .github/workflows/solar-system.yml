@@ -1,4 +1,4 @@
-name: Solar Syatem Workflow
+name: Solar System Workflow
 
 on:
   workflow_dispatch: 
@@ -14,22 +14,15 @@ env:
 jobs:
   unit-Testing:
     name: Unit Testing
-    strategy:
-      matrix:
-        node_js_version: [18,20]
-        operating_system: [ubuntu_latest, macos_latest]
-        exclude:
-          - node_js_version: 18
-            operating_system: macos_latest
-    runs-on: ${{matrix.operating_system}}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repositery
         uses: actions/checkout@v4
 
-      - name: Setup nodejs version -${{matrix.node_js_version}}
+      - name: Setup nodejs version -18
         uses: actions/setup-node@v4
         with:
-          node-version: ${{matrix.node_js_version}}
+          node-version: 18
 
       - name: Install Dependencies
         run: npm install
@@ -42,3 +35,28 @@ jobs:
         with:
           name: MOCHA-TEST-RESULTS
           path: test-results.xml 
+
+  code-coverage:
+    name: Running Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repositery
+        uses: actions/checkout@v4
+
+      - name: Setup nodejs version -18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18      
+  
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Check Code Coverage
+        run: npm run coverage
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: COVERAGE_RESULTS
+          path: coverage
+          retention-days: 5 
