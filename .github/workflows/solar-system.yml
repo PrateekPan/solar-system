@@ -28,9 +28,11 @@ jobs:
         run: npm install
 
       - name: Unit Testing
+        id: Node-Js-Id
         run: npm test
 
       - name: Upload Artifacts
+        if: steps.Node-Js-Id.outcome == 'failure' || steps.Node-Js-Id.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: MOCHA-TEST-RESULTS
