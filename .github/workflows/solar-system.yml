@@ -75,3 +75,13 @@ jobs:
           name: COVERAGE_RESULTS
           path: coverage
           retention-days: 5 
+
+  Docker_Login:
+    name: Logging in to docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ var.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
